@@ -123,13 +123,18 @@ function deps_routes()
 
     Genie.Router.route(Genie.Assets.asset_route(assets_config, :css, file="pivot.min"), named=:get_pivotmincss) do
         Genie.Renderer.WebRenderable(
-            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="pivot.min.css")),
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), type="css", file="pivot.min.css")),
             :css) |> Genie.Renderer.respond
     end
 
     nothing
 end
 
+function css_deps()
+    [
+        Stipple.Elements.stylesheet(Genie.Assets.asset_path(assets_config, :css, file="pivot.min"))
+    ]
+end
 
 function deps()
     [
@@ -138,12 +143,12 @@ function deps()
         Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="03_jquery.ui.touch-punch.min")),
         Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="04_pivot.min")),
         Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="10_stipplepivottable")),
-        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :css, file="pivot.min")),
     ]
 end
 
 function __init__()
     deps_routes()
+    Stipple.add_css(css_deps)
     Stipple.deps!(@__MODULE__, deps)
 end
 
