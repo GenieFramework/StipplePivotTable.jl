@@ -90,19 +90,47 @@ function deps_routes()
 
     Genie.Assets.external_assets(Stipple.assets_config) && return nothing
 
-    Genie.Router.route(Genie.Assets.asset_route(assets_config, :js, file="stipplepivottable"), named=:get_stipplepivottable) do
+    Genie.Router.route(Genie.Assets.asset_route(assets_config, :js, file="10_stipplepivottable"), named=:get_stipplepivottablejs) do
         Genie.Renderer.WebRenderable(
-            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="stipplepivottable.js")),
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="10_stipplepivottable.js")),
             :javascript) |> Genie.Renderer.respond
     end
 
+    Genie.Router.route(Genie.Assets.asset_route(assets_config, :js, file="01_jquery"), named=:get_jqueryjs) do
+        Genie.Renderer.WebRenderable(
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="01_jquery.js")),
+            :javascript) |> Genie.Renderer.respond
+    end
+
+    Genie.Router.route(Genie.Assets.asset_route(assets_config, :js, file="02_jquery-ui.min"), named=:get_jqueryuijs) do
+        Genie.Renderer.WebRenderable(
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="02_jquery-ui.min.js")),
+            :javascript) |> Genie.Renderer.respond
+    end
+
+    Genie.Router.route(Genie.Assets.asset_route(assets_config, :js, file="03_jquery.ui.touch-punch.min"), named=:get_jqueryuitouchpunchmin) do
+        Genie.Renderer.WebRenderable(
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="03_jquery.ui.touch-punch.min.js")),
+            :javascript) |> Genie.Renderer.respond
+    end
+
+    Genie.Router.route(Genie.Assets.asset_route(assets_config, :js, file="04_pivot.min"), named=:get_pivotminjs) do
+        Genie.Renderer.WebRenderable(
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="04_pivot.min.js")),
+            :javascript) |> Genie.Renderer.respond
+    end
 
     nothing
 end
 
+
 function deps()
     [
-        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="stipplepivottable")),
+        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="01_jquery")),
+        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="02_jquery-ui.min")),
+        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="03_jquery.ui.touch-punch.min")),
+        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="04_pivot.min")),
+        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="10_stipplepivottable")),
     ]
 end
 
