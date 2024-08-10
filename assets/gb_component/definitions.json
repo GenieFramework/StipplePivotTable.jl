@@ -1,0 +1,49 @@
+{
+  "label": "PivotTable",
+  "tagName": "ST-PIVOTTABLE",
+  "type": "pivottable",
+  "icon": "{appPath}/components/pivottable/assets/library_icon.png",
+  "category": "Custom Components",
+  "content": "<st-pivottable gb_c__dataset=\"[]\" gb_c__rows=\"[]\" gb_c__cols=\"[]\" gb_c__vals=\"[]\"></pivottable>",
+  "description": "",
+  "isComposite": true,
+  "enabled": true,
+  "hideFromLibrary": false,
+  "draggable": true,
+  "editable": false,
+  "droppable": false,
+  "properties": [
+    {
+      "label": "Dataset",
+      "name": "dataset",
+      "enabled": true,
+      "type": [
+        "Array"
+      ]
+    },
+    {
+      "label": "Rows",
+      "name": "rows",
+      "enabled": true,
+      "type": [
+        "Array"
+      ]
+    },
+    {
+      "label": "Cols",
+      "name": "cols",
+      "enabled": true,
+      "type": [
+        "Array"
+      ]
+    },
+    {
+      "label": "Values",
+      "name": "vals",
+      "enabled": true,
+      "type": [
+        "Array"
+      ]
+    }
+  ]
+}

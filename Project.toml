@@ -1,0 +1,14 @@
+name = "StipplePivotTable"
+uuid = "29f11006-3202-4091-a17b-0a26282d76dd"
+version = "0.1.0"
+
+[deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
+Stipple = "4acbeb90-81a0-11ea-1966-bdaff8155998"
+StippleUI = "a3c5d34a-b254-4859-a8fa-b86abb7e84a3"
+
+[compat]
+Stipple = "0.28, 0.29, 0.30"
+StippleUI = "0.23"
+DataFrames = "1.6.1"
+julia = "1.6"
