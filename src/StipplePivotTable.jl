@@ -72,6 +72,7 @@ function gb_component_routes()
         prefix=prefix,
         ext=""
     ),
+
     named=:get_gb_component_stipplepivottable_icons_stipplepivottable) do
         Genie.Renderer.WebRenderable(
             Genie.Assets.embedded(
@@ -120,6 +121,12 @@ function deps_routes()
             :javascript) |> Genie.Renderer.respond
     end
 
+    Genie.Router.route(Genie.Assets.asset_route(assets_config, :css, file="pivot.min"), named=:get_pivotmincss) do
+        Genie.Renderer.WebRenderable(
+            Genie.Assets.embedded(Genie.Assets.asset_file(cwd=normpath(joinpath(@__DIR__, "..")), file="pivot.min.css")),
+            :css) |> Genie.Renderer.respond
+    end
+
     nothing
 end
 
@@ -131,6 +138,7 @@ function deps()
         Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="03_jquery.ui.touch-punch.min")),
         Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="04_pivot.min")),
         Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :js, file="10_stipplepivottable")),
+        Genie.Renderer.Html.script(src=Genie.Assets.asset_path(assets_config, :css, file="pivot.min")),
     ]
 end
 
