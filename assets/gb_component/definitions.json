@@ -1,7 +1,8 @@
 {
   "label": "PivotTable",
+  "gbPluginId": "stipplepivottable", 
   "tagName": "ST-PIVOTTABLE",
-  "type": "pivottable",
+  "type": "st-pivottable",
   "icon": "{appPath}/components/pivottable/assets/library_icon.png",
   "category": "Custom Components",
   "content": "<st-pivottable gb_c__dataset=\"[]\" gb_c__rows=\"[]\" gb_c__cols=\"[]\" gb_c__vals=\"[]\"></pivottable>",
