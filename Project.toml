@@ -1,6 +1,6 @@
 name = "StipplePivotTable"
 uuid = "29f11006-3202-4091-a17b-0a26282d76dd"
-version = "0.1.1"
+version = "0.1.2"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
