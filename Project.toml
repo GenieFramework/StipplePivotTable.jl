@@ -1,5 +1,5 @@
 name = "StipplePivotTable"
-uuid = "29f11006-3202-4091-a17b-0a26282d76dd"
+uuid = "adab0226-ee3c-44de-8f2f-393b1bf1e936"
 version = "0.1.2"
 
 [deps]
