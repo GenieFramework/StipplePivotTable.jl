@@ -122,7 +122,6 @@ if (window.Vue) {
         if (!this.dataset) return;
         
         this.destroyPivotTable();
-        console.log( 'renderPivotTable', this.pivotOptions );
         window.TESTER_PARAMS = { dataset: this.dataset, pivotOptions: this.pivotOptions };
         this.pivotInstance = window.jQuery(this.$refs.pivotContainer).pivotUI(
           this.dataset,
@@ -131,51 +130,39 @@ if (window.Vue) {
       },
       
       destroyPivotTable() {
-        console.log( 'destroyPivotTable?: ', this.pivotInstance? 'YES' : 'NO' );
         if (this.pivotInstance) {
-          // Remove all event handlers and data
-          window.jQuery(this.$refs.pivotContainer).off();
-          // Remove all child elements
-          window.jQuery(this.$refs.pivotContainer).empty();
-          // Remove any data associated with the pivot table
-          window.jQuery(this.$refs.pivotContainer).removeData();
+          window.jQuery(this.$refs.pivotContainer).off();         // Remove all event handlers and data
+          window.jQuery(this.$refs.pivotContainer).empty();       // Remove all child elements
+          window.jQuery(this.$refs.pivotContainer).removeData();  // Remove any data associated with the pivot table
           this.pivotInstance = null;
         }
       },
 
       handleRefresh(config) {
-        console.log( 'handleRefresh 1', config );
-       
-        //this.$emit('refresh', config);
         for( let p in this.$props ) {
           if( this.editableFields.includes(p) ){
             let isArray = Array.isArray( config[p] );
             let valueChanged = isArray ? JSON.stringify( this.pivotOptions[p] ) !== JSON.stringify( config[p] ) : this.pivotOptions[p] !== config[p];
             if( valueChanged ) {
               this.pivotOptions[p] = config[p];
-              console.log( 'handleRefresh 2: ', p, config[p], " (old: ", this.$props[p], ")" );
               this.$emit('update:'+p, config[p]);
-              //this.$parent[p] = config[p];
             }
           }
         }
-
-        //this.onRefresh(config);
       }, 
 
-      onPropChanged() {
-        console.log( 'onPropChanged', arguments );
+      onPropChanged: _.debounce(function() {
         let somethingChanged = false;
-        for( let p in this.pivotProps ) {
-            if( this.pivotProps[p] !== this.pivotOptions[p] ) {
-              somethingChanged = true;
-              this.pivotOptions[p] = this.pivotProps[p];
-            }
+        for (let p in this.pivotProps) {
+          if (this.pivotProps[p] !== this.pivotOptions[p]) {
+            somethingChanged = true;
+            this.pivotOptions[p] = this.pivotProps[p];
+          }
         }
-        if( somethingChanged ) {
+        if (somethingChanged) {
           this.renderPivotTable();
         }
-      }, 
+      }, 300), 
     },
 
     watch: {
