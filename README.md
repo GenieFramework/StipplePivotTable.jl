@@ -8,7 +8,16 @@ The component accepts the following properties:
 
 ### data
 
-The data source for the pivot table. Expected format is an list of objects representing rows in a table
+The data source for the pivot table. Expected format is a DataFrame
+
+Example:
+
+```
+json_string = read(json_file, String)
+raw_data = JSON3.read(json_string)
+dataframe = DataFrame(raw_data)     # Use this variable for the component's "data" property
+```
+
 
 ### rows
 

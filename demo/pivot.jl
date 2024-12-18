@@ -7,12 +7,9 @@ using StipplePivotTable, DataFrames, JSON3
 json_file = "data/Employee_Sample_Data.json"
 json_string = read(json_file, String)
 data = JSON3.read(json_string)
-clean_data = Vector{Dict{String, Any}}()
 
-# Convert each JSON3.Object to Dict{String, Any}
-for (_, v) in pairs(data)
-    push!(clean_data, Dict{String, Any}(string(k) => v for (k, v) in pairs(v)))
-end
+# create a DataFrame
+dataframe = DataFrame(data)
 
 
 @app begin
@@ -36,7 +33,7 @@ end
     ]
 
     # expose data binding
-    @out data = clean_data
+    @out dataframe = dataframe
 end
 
 # serve the app
