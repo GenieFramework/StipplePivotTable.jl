@@ -1,6 +1,7 @@
 module StipplePivotTable
 
 using Stipple, StippleUI.API
+import Tables as TablesInterface
 
 export pivottable
 
@@ -9,6 +10,44 @@ const assets_config = Genie.Assets.AssetsConfig(package="StipplePivotTable.jl")
 import Stipple.Genie.Renderer.Html: register_normal_element, normal_element
 
 register_normal_element("st__pivottable", context=@__MODULE__)
+
+const AGGREGATIONS = [:sum]
+const FILTER_TYPES = [:condition, :values]
+const CONDITIONS = [:greaterThan, :lessThan, :greaterThanOrEqualTo, :lessThanOrEqualTo, :equalTo, :notEqualTo, :contains, :notContains, :startsWith, :endsWith]
+
+@kwdef mutable struct Cell
+    field::Union{String, Symbol}
+    sort_by::Union{String, Symbol} = "label"
+    sort_order::Union{String, Symbol} = "asc"
+    label::Union{String, Symbol, Nothing} = nothing
+end
+
+@kwdef mutable struct Value
+    field::Union{String, Symbol}
+    aggregation::Union{String, Symbol}
+    formula::Union{String, Symbol, Nothing} = nothing
+end
+
+@kwdef mutable struct Filter
+    column::Union{String, Symbol, Nothing} = nothing
+    row::Union{String, Symbol, Nothing} = nothing
+    type::Union{String, Symbol}
+    condition::Union{String, Symbol}
+    value::Union{String, Symbol, Nothing} = nothing
+    selected_values::Union{Vector{String}, Nothing} = nothing
+end
+
+@kwdef mutable struct PivotTableOptions
+    rows::Vector{Cell}
+    columns::Vector{Cell}
+    values::Vector{Value}
+    filters::Vector{Filter}
+end
+
+@kwdef mutable struct PivotTable{T}
+    data::T
+    opts::PivotTableOptions
+end
 
 
 function pivottable(;kwargs...)
