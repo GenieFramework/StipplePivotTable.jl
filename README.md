@@ -59,7 +59,7 @@ Example:
 A list of objects defining the values to include in the table's grid. Each object should include the following properties:
 
 - field: Name of the data source field
-- aggregation: Name of the function to calculate the aggregation. Accepted values: sum, counta, count, countunique, average, max, min, median, stdev, stdevp, var, varp, custom
+- aggregation: Name of the function to calculate the aggregation.
 - formula: If "aggregation"'s value is set to "custom", an additional property "formula" should be provided as a string. Fields in the data source can be referenced using curly braces, i.e: {Annual Salary} * 0.01
 
 Example:
@@ -71,6 +71,22 @@ Example:
 ]
 ```
 
+#### Supported Aggregation Functions
+
+- sum
+- count
+- counta
+- countunique
+- avg
+- average
+- max
+- min
+- median
+- stdev
+- stdevp
+- var
+- varp
+- custom
 
 ### filters
 
