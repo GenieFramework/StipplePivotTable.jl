@@ -62,12 +62,15 @@ A list of objects defining the values to include in the table's grid. Each objec
 - aggregation: Name of the function to calculate the aggregation.
 - formula: If "aggregation"'s value is set to "custom", an additional property "formula" should be provided as a string. Fields in the data source can be referenced using curly braces, i.e: {Annual Salary} * 0.01
 
+Optionally, you can include a "label" property to show a custom field name
+
+
 Example:
 
 ```
 [
     Dict(:field => "Annual Salary", :aggregation => "sum" ), 
-    Dict(:field => "Annual Salary", :aggregation => "custom", :formula => " {Annual Salary} * 0.01 " )
+    Dict(:field => "Annual Salary", :aggregation => "custom", :formula => " {Annual Salary} * 0.21 ", :label => "Tax" )
 ]
 ```
 
