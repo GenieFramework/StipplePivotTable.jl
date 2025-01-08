@@ -32,11 +32,12 @@ Stipple.render(cells::Vector{Cell}) = Stipple.render([Stipple.render(cell) for c
     field::Union{String, Symbol}
     aggregation::Union{String, Symbol}
     formula::Union{String, Symbol, Nothing} = nothing
+    label::Union{String, Symbol} = field
 end
 Value(field::Union{String, Symbol}; kwargs...) = Value(; field, kwargs...)
 
 function Stipple.render(value::Value)
-    d = Dict(:field => value.field, :aggregation => value.aggregation)
+    d = Dict(:field => value.field, :aggregation => value.aggregation, :label => value.label)
     if value.formula !== nothing
         d[:formula] = " $(value.formula) " # this is needed to allow {field} in the formula to be rendered correctly
     end
@@ -61,7 +62,8 @@ function Stipple.render(filter::Filter)
         filter.type = :condition
     end
 
-    return Dict(:field => filter.field, :filterType => filter.type, :condition => filter.condition, :value => filter.value, :selectedValues => filter.selected_values)
+    return Dict(:field => filter.field, :filterType => filter.type, :condition => filter.condition, :value => filter.value,
+                :selectedValues => filter.selected_values)
 end
 Stipple.render(filters::Vector{Filter}) = Stipple.render([Stipple.render(filter) for filter in filters])
 
