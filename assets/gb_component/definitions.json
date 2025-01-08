@@ -27,7 +27,7 @@
       "name": "rows",
       "enabled": true,
       "type": [
-        "Array"
+        "Vector.StipplePivotTable.Cell"
       ]
     },
     {
@@ -35,7 +35,7 @@
       "name": "columns",
       "enabled": true,
       "type": [
-        "Array"
+        "Vector.StipplePivotTable.Cell"
       ]
     },
     {
@@ -43,7 +43,7 @@
       "name": "values",
       "enabled": true,
       "type": [
-        "Array"
+        "Vector.StipplePivotTable.Value"
       ]
     }, 
     {
@@ -51,7 +51,7 @@
       "name": "filters",
       "enabled": true,
       "type": [
-        "Array"
+        "Vector.StipplePivotTable.Filter"
       ]
     }
   ]
