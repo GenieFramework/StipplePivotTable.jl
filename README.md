@@ -1,6 +1,6 @@
 # StipplePivotTable
 
-This component renders a configurable Pivot Table featuring aggregations, filters and row/column sorting
+This component renders a configurable Pivot Table featuring aggregations, filters, and row/column sorting.
 
 ## How to use
 
@@ -8,112 +8,123 @@ The component accepts the following properties:
 
 ### data
 
-The data source for the pivot table. Expected format is a DataFrame
+The data source for the pivot table. Expected format is any object that complies to the Tables.jl interface (most commonly a DataFrame).
 
 Example:
 
-```
+```julia
+# load json file and parse it, then convert it to a DataFrame
 json_string = read(json_file, String)
 raw_data = JSON3.read(json_string)
 dataframe = DataFrame(raw_data)     # Use this variable for the component's "data" property
 ```
 
-
 ### rows
 
-A list of objects defining the rows aggregation hierarchy. Each object should include the following properties:
+A list of `Cell` objects defining the rows aggregation hierarchy. Each `Cell` object should include the following properties:
 
-- field: Name of the data source field
-- sortBy: Criteria to perform sorting. Accepted values are "label" (to sort alphabetically) or name of one of the rendered values, i.e. "Annual Salary (sum)"
-- sortOrder: Order of sorting. Accepted values: "asc", "desc"
+- `field`: Name of the data source field.
+- `sort_by`: Criteria to perform sorting.
+- `order`: Order of sorting. Accepted values: `"asc"` (default), `"desc"`.
+- `label`: The label of the cell. Defaults to the value of `field`.
 
 Example:
 
-```
-[
-    Dict(:field => "Business Unit", :sortBy => "label", :sortOrder => "asc"),
-    Dict(:field => "Department", :sortBy => "label", :sortOrder => "desc")
+```julia
+rows = [
+    Cell(field = "Business Unit", sort_by = "label", order = "asc"),
+    Cell(field = "Department", sort_by = "label", order = "desc")
 ]
 ```
 
 ### columns
 
-A list of objects defining the columns aggregation hierarchy. Each object should include the following properties:
+A list of `Cell` objects defining the columns aggregation hierarchy. Each `Cell` object should include the following properties:
 
-- field: Name of the data source field
-- sortBy: Criteria to perform sorting. Accepted values are "label" (to sort alphabetically) or name of one of the rendered values, i.e. "Annual Salary (sum)"
-- sortOrder: Order of sorting. Accepted values: "asc", "desc"
+- `field`: Name of the data source field.
+- `sort_by`: Criteria to perform sorting.
+- `order`: Order of sorting. Accepted values: `"asc"` (default), `"desc"`.
+- `label`: The label of the cell. Defaults to the value of `field`.
 
 Example:
 
-```
-[
-    Dict(:field => "Gender", :sortBy => "label", :sortOrder => "desc"),
-    Dict(:field => "Ethnicity", :sortBy => "label", :sortOrder => "asc")
+```julia
+columns = [
+    Cell(field = "Annual Salary", sort_by = "label", order = "asc"),
+    Cell(field = "Gender", sort_by = "label", order = "desc")
 ]
 ```
-
 
 ### values
 
-A list of objects defining the values to include in the table's grid. Each object should include the following properties:
+A list of `Value` objects defining the values to be aggregated in the pivot table. Each `Value` object should include the following properties:
 
-- field: Name of the data source field
-- aggregation: Name of the function to calculate the aggregation.
-- formula: If "aggregation"'s value is set to "custom", an additional property "formula" should be provided as a string. Fields in the data source can be referenced using curly braces, i.e: {Annual Salary} * 0.01
-
-Optionally, you can include a "label" property to show a custom field name
-
+- `field`: Name of the data source field.
+- `aggregation`: The aggregation method to be applied to the field.
+- `formula`: An optional formula for calculating the value. Defaults to `nothing`.
+- `label`: A label for the value. Defaults to the value of `field`.
 
 Example:
 
-```
-[
-    Dict(:field => "Annual Salary", :aggregation => "sum" ), 
-    Dict(:field => "Annual Salary", :aggregation => "custom", :formula => " {Annual Salary} * 0.21 ", :label => "Tax" )
+```julia
+values = [
+    Value(field = "Annual Salary", aggregation = "sum"),
+    Value(field = "Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.02")
 ]
 ```
-
-#### Supported Aggregation Functions
-
-- sum
-- count
-- counta
-- countunique
-- avg
-- average
-- max
-- min
-- median
-- stdev
-- stdevp
-- var
-- varp
-- custom
 
 ### filters
 
-A list of objects defining the filters to be applied to exclude rows. Each object should include the following properties:
+A list of `Filter` objects defining the filters to be applied to the pivot table. Each `Filter` object should include the following properties:
 
-- column: Name of the data source field to filter by
-- filterType: There are two modalities of filters, "by Condition" and "by Values". Accepted values: "condition" and "values"
-
-#### Additinal properties for "by Condition" filters:
-
-- condition: Operator for the condition. Accepted values: equals, notEquals, greaterThan, greaterThanOrEqual, lessThan, lessThanOrEqual, contains, notContains, startsWith, endsWith, isEmpty, isNotEmpty
-- value: Value to be used in the condition statement
-
-
-#### Additinal properties for "by Values" filters:
-
-- condition: Operator for the condition. Accepted value: contains (other values may be accepted in future versions)
-- selectedValues: List of values that will pass the filter
+- `field`: The field to which the filter is applied.
+- `condition`: The condition to be applied on the field.
+- `type`: The type of the filter, default is `nothing`.
+- `value`: The value for the filter, default is `nothing`.
+- `selected_values`: The selected values for the filter, default is `nothing`.
 
 Example:
 
-```
-[
-    Dict(:column => "Annual Salary", :filterType => "condition", :condition => "greaterThan", :value => 220000), 
-    Dict(:column => "Country", :filterType => "values", :condition => "contains", :selectedValues => ["China", "Brazil"] )
+```julia
+filters = [
+    Filter(field = "Annual Salary", condition = "greaterThan", value = 220000),
+    Filter(field = "Country", condition = "contains", selected_values = ["China", "Brazil"])
 ]
+```
+
+### Creating a Pivot Table
+
+To create a pivot table, use the `PivotTable` and `PivotTableOptions` structs along with the `pivottable` function.
+
+Example:
+
+```julia
+using StipplePivotTable; const spt = StipplePivotTable
+using DataFrames, JSON3
+
+# Load and parse source data
+json_file = "data/Employee_Sample_Data.json"
+json_string = read(json_file, String)
+data = JSON3.read(json_string)
+df = DataFrame(data)
+
+# Create a pivot table
+pt = PivotTable(
+    df,
+    PivotTableOptions(
+        rows = spt.rows(["Country", "Department"]),
+        columns = spt.columns(["Annual Salary", "Gender", "Ethnicity"]),
+        values = [
+            Value("Annual Salary", aggregation = "sum"),
+            Value("Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.02")
+        ],
+        filters = [
+            Filter("Annual Salary", condition = "greaterThan", value = 220000),
+            Filter("Country", condition = "contains", selected_values = ["China", "Brazil"])
+        ]
+    )
+)
+
+# Render the pivot table
+pivottable(pt)
 ```
