@@ -138,7 +138,7 @@ In low-code Julia, the pivot table can be rendered using the `pivottable` functi
 
 ```julia
 # Render the pivot table
-pivottable(:pt)
+pivottable(pt)
 ```
 
 While in HTML views, rendering is done using the corresponding HTML component: 
