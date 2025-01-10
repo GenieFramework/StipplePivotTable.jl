@@ -291,7 +291,7 @@ function Stipple.render(pt::PivotTable)
     isempty(pt.opts.rows) && (pt.opts.rows = rows(pt))
     isempty(pt.opts.columns) && (pt.opts.columns = columns(pt))
 
-    return Dict(:data => data(pt), :options => Stipple.render(pt.opts))
+    return Dict(:data => data(pt), :opts => Stipple.render(pt.opts))
 end
 
 
@@ -432,7 +432,7 @@ Retrieve the data from a `PivotTable` object.
 - A table representation of the data contained in the `PivotTable` object.
 """
 function data(pivot::PivotTable)
-    TablesInterface.table(pivot.data)
+    pivot.data
 end
 
 
@@ -491,8 +491,36 @@ Creates a pivot table with the given keyword arguments.
 - The created pivot table.
 """
 function pivottable(; kwargs...)
-    st_pivottable(; kw([kwargs...])...)
+    st__pivottable(; kw([kwargs...])...)
 end
+
+
+"""
+    pivottable(field::Symbol, args...; kwargs...)
+
+Create a pivot table using the specified `field` and additional arguments.
+
+# Arguments
+- `field::Symbol`: The symbol representing the field to be used for the pivot table. Should reference an instance of `PivotTable`.
+- `args...`: Additional positional arguments to be passed to the `st_pivottable` function/component.
+- `kwargs...`: Additional keyword arguments to be passed to the `st_pivottable` function/component.
+
+# Returns
+HTML for rendering the pivot table component created by the `st_pivottable` function with the specified configurations.
+"""
+function pivottable(field::Symbol, args...; kwargs...)
+    st__pivottable(args...;
+        kw([
+            Symbol(":data") => "$(field).data",
+            Symbol(":columns") => "$(field).opts.columns",
+            Symbol(":rows") => "$(field).opts.rows",
+            Symbol(":values") => "$(field).opts.values",
+            Symbol(":filters") => "$(field).opts.filters",
+            kwargs...
+        ])...
+    )
+end
+
 
 #================================================================================#
 #=========================== PRIVATE -- Genie integration =======================#
