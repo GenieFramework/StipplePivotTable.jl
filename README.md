@@ -24,7 +24,7 @@ dataframe = DataFrame(raw_data)     # Use this variable for the component's "dat
 A list of `Cell` objects defining the rows aggregation hierarchy. Each `Cell` object should include the following properties:
 
 - `field`: Name of the data source field.
-- `sort_by`: Criteria to perform sorting.
+- `sort_by`: Criteria to perform sorting. Defaults to `"label"`. Other accepted values must reference items in the `"Values"` section, concatenating field name and aggregation function, joined by underscore `"_"` (i.e. `"Annual Salary_sum"`)
 - `order`: Order of sorting. Accepted values: `"asc"` (default), `"desc"`.
 - `label`: The label of the cell. Defaults to the value of `field`.
 
@@ -42,7 +42,7 @@ rows = [
 A list of `Cell` objects defining the columns aggregation hierarchy. Each `Cell` object should include the following properties:
 
 - `field`: Name of the data source field.
-- `sort_by`: Criteria to perform sorting.
+- `sort_by`: Criteria to perform sorting. Defaults to `"label"`. Other accepted values must reference items in the `"Values"` section, concatenating field name and aggregation function, joined by underscore `"_"` (i.e. `"Annual Salary_sum"`)
 - `order`: Order of sorting. Accepted values: `"asc"` (default), `"desc"`.
 - `label`: The label of the cell. Defaults to the value of `field`.
 
