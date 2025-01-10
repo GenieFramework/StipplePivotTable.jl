@@ -247,10 +247,11 @@ Render the given `PivotTableOptions` into a dictionary format suitable for Stipp
 - `Dict`: A dictionary with keys `:rows`, `:columns`, `:values`, and `:filters`, each containing a list of rendered cells, values, or filters.
 """
 function Stipple.render(opts::PivotTableOptions)
-    return Dict(:rows => [Stipple.render(cell) for cell in opts.rows],
-                :columns => [Stipple.render(cell) for cell in opts.columns],
-                :values => [Stipple.render(value) for value in opts.values],
-                :filters => [Stipple.render(filter) for filter in opts.filters])
+    return Dict(:rows => Stipple.render([cell for cell in opts.rows]),
+                :columns => Stipple.render([cell for cell in opts.columns]),
+                :values => Stipple.render([value for value in opts.values]),
+                :filters => Stipple.render([filter for filter in opts.filters]),
+                )
 end
 
 
@@ -291,7 +292,7 @@ function Stipple.render(pt::PivotTable)
     isempty(pt.opts.rows) && (pt.opts.rows = rows(pt))
     isempty(pt.opts.columns) && (pt.opts.columns = columns(pt))
 
-    return Dict(:data => data(pt), :opts => Stipple.render(pt.opts))
+    return Dict(:data => Stipple.render(pt.data), :opts => Stipple.render(pt.opts))
 end
 
 

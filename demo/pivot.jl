@@ -28,11 +28,11 @@ pt = PivotTable(
 )
 
 @app begin
-    # @out rows = pt.opts.rows
-    # @out columns = pt.opts.columns
-    # @out values = pt.opts.values
-    # @out filters = pt.opts.filters
-    # @out data = pt.data
+    @out rows = pt.opts.rows
+    @out columns = pt.opts.columns
+    @out values = pt.opts.values
+    @out filters = pt.opts.filters
+    @out data = pt.data
 
     @out pt = pt
 end
@@ -46,7 +46,7 @@ ui() = [
     ])
 ]
 
-# @page("/", "app.jl.html")
-@page("/", ui)
+@page("/", "app.jl.html")
+# @page("/", ui)
 
 end
