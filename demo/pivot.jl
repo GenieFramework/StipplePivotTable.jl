@@ -15,7 +15,7 @@ pt = PivotTable(
     df,
     PivotTableOptions(
         rows = spt.rows(["Country", "Department"]),
-        columns = spt.columns(["Annual Salary", "Gender", "Ethnicity"]),
+        columns = spt.columns(["Gender", "Ethnicity"]),
         values = [
             Value("Annual Salary", aggregation = "sum"),
             Value("Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.02")
@@ -28,25 +28,25 @@ pt = PivotTable(
 )
 
 @app begin
-    @out rows = pt.opts.rows
-    @out columns = pt.opts.columns
-    @out values = pt.opts.values
-    @out filters = pt.opts.filters
-    @out data = pt.data
+    # @out rows = pt.opts.rows
+    # @out columns = pt.opts.columns
+    # @out values = pt.opts.values
+    # @out filters = pt.opts.filters
+    # @out data = pt.data
 
     @out pt = pt
 end
 
 ui() = [
-    h1("Pivot Table Low-code")
+    h1("Pivot Table Low-code", class="st-module")
 
     # Table section
-    section(class="table-container", [
+    section(class="table-container st-module", [
         pivottable(:pt)  # Bind the pivot table from the model
     ])
 ]
 
-@page("/", "app.jl.html")
-# @page("/", ui)
+# @page("/", "app.jl.html")
+@page("/", ui)
 
 end
