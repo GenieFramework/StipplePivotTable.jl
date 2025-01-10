@@ -32,7 +32,7 @@ Example:
 
 ```julia
 rows = [
-    Cell(field = "Business Unit", sort_by = "label", order = "asc"),
+    Cell(field = "Business Unit", sort_by = "label", order = "asc", label = "Business U."),
     Cell(field = "Department", sort_by = "label", order = "desc")
 ]
 ```
@@ -50,7 +50,7 @@ Example:
 
 ```julia
 columns = [
-    Cell(field = "Annual Salary", sort_by = "label", order = "asc"),
+    Cell(field = "Annual Salary", sort_by = "label", order = "asc", label = "Salary"),
     Cell(field = "Gender", sort_by = "label", order = "desc")
 ]
 ```
@@ -69,7 +69,7 @@ Example:
 ```julia
 values = [
     Value(field = "Annual Salary", aggregation = "sum"),
-    Value(field = "Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.02")
+    Value(field = "Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.21", label = "Tax")
 ]
 ```
 
@@ -116,7 +116,7 @@ pt = PivotTable(
         columns = spt.columns(["Annual Salary", "Gender", "Ethnicity"]),
         values = [
             Value("Annual Salary", aggregation = "sum"),
-            Value("Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.02")
+            Value("Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.21", label = "Tax")
         ],
         filters = [
             Filter("Annual Salary", condition = "greaterThan", value = 220000),
@@ -125,6 +125,24 @@ pt = PivotTable(
     )
 )
 
+# Expose the pivot table var
+
+@app begin
+    @out pt = pt
+end
+```
+
+### Rendering the pivot table
+
+In low-code Julia, the pivot table can be rendered using the `pivottable` function: 
+
+```julia
 # Render the pivot table
 pivottable(pt)
+```
+
+While in HTML views, rendering is done using the corresponding HTML component: 
+
+```html
+<st-pivottable :data="pt.data" :columns="pt.opts.columns" :values="pt.opts.values" :rows="pt.otps.rows" :filters="pt.opts.filters"></st-pivottable>
 ```
