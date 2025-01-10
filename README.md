@@ -134,14 +134,14 @@ end
 
 ### Rendering the pivot table
 
-In low-code Julia, the pivot table can be rendered using the `pivottable` function: 
+In low-code Julia, the pivot table can be rendered using the `pivottable` function:
 
 ```julia
 # Render the pivot table
-pivottable(pt)
+pivottable(:pt)
 ```
 
-While in HTML views, rendering is done using the corresponding HTML component: 
+While in HTML views, rendering is done using the corresponding HTML component:
 
 ```html
 <st-pivottable :data="pt.data" :columns="pt.opts.columns" :values="pt.opts.values" :rows="pt.otps.rows" :filters="pt.opts.filters"></st-pivottable>
