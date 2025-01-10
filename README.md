@@ -73,6 +73,27 @@ values = [
 ]
 ```
 
+#### Built-in aggregation methods
+- `sum`: Sum of values
+- `count`: Count of records
+- `counta`: Count of non-null values
+- `countunique`: Count of unique values
+- `average`: Average (mean) of values
+- `max`: Maximum value
+- `min`: Minimum value
+- `median`: Median value
+- `stdev`: Sample standard deviation
+- `stdevp`: Population standard deviation
+- `var`: Sample variance
+- `varp`: Population variance
+- `custom`: Custom formula
+
+#### Custom formula syntax
+
+- Use curly braces to reference fields: `{fieldName}`
+- Example: `{Annual Salary} * 0.21`
+
+
 ### filters
 
 A list of `Filter` objects defining the filters to be applied to the pivot table. Each `Filter` object should include the following properties:
