@@ -6,9 +6,7 @@ using DataFrames, JSON3
 
 # Load and parse source data
 json_file = "data/Employee_Sample_Data.json"
-json_string = read(json_file, String)
-data = JSON3.read(json_string)
-df = DataFrame(data)
+df = JSON3.read(read(json_file, String)) |> DataFrame
 
 # create a pivot table
 pt = PivotTable(
