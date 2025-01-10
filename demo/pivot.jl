@@ -28,13 +28,25 @@ pt = PivotTable(
 )
 
 @app begin
-    @out rows = pt.opts.rows
-    @out columns = pt.opts.columns
-    @out values = pt.opts.values
-    @out filters = pt.opts.filters
-    @out data = pt.data
+    # @out rows = pt.opts.rows
+    # @out columns = pt.opts.columns
+    # @out values = pt.opts.values
+    # @out filters = pt.opts.filters
+    # @out data = pt.data
+
+    @out pt = pt
 end
 
-# serve the app
-@page("/", "app.jl.html")
+ui() = [
+    h1("Pivot Table Low-code")
+
+    # Table section
+    section(class="table-container", [
+        pivottable(:pt)  # Bind the pivot table from the model
+    ])
+]
+
+# @page("/", "app.jl.html")
+@page("/", ui)
+
 end
