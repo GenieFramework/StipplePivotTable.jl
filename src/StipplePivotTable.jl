@@ -91,7 +91,7 @@ Base.Dict(formatter::T) where T <: ValueFormatter = Dict(
 function Stipple.render(formatter::T) where T <: ValueFormatter
     type = replace(string(typeof(formatter) |> nameof), "Formatter" => "") |> lowercase
     Dict(:type => type, :config => Dict(
-        [Symbol(snake_to_camel(k)) => v for (k, v) in Dict(formatter)]
+        [Symbol(snake_to_camel(k) |> lowercase) => v for (k, v) in Dict(formatter)]
     ))
 end
 
