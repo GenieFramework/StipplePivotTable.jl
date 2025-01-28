@@ -15,12 +15,12 @@ pt = PivotTable(
         rows = spt.rows(["Country", "Department"]),
         columns = spt.columns(["Gender", "Ethnicity"]),
         values = [
-            Value("Annual Salary", aggregation = "sum"),
-            Value("Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.02")
+            Value("Annual Salary", aggregation = ValueAggregations.sum, format = CurrencyFormatter()),
+            Value("Annual Salary", aggregation = ValueAggregations.custom, formula = "{Annual Salary} * 0.02", format = PercentageFormatter())
         ],
         filters = [
-            Filter("Annual Salary", type = "condition", condition = "greaterThan", value = 220000),
-            Filter("Country", type = "values", condition = "contains", selected_values = ["China", "Brazil"])
+            Filter("Annual Salary", type = FilterTypes.condition, condition = FilterConditions.gt, value = 220000),
+            Filter("Country", type = FilterTypes.values, condition = FilterConditions.contains, selected_values = ["China", "Brazil"])
         ]
     )
 )
