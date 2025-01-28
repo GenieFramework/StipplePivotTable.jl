@@ -4,6 +4,8 @@ using Stipple, StippleUI.API, Stipple.ReactiveTools
 import Tables as TablesInterface
 
 export pivottable, Cell, Value, Filter, PivotTableOptions, PivotTable
+export ValueAggregations, FilterTypes, FilterConditions
+export NumberFormatter, CurrencyFormatter, PercentageFormatter #, DateFormatter
 
 const assets_config = Genie.Assets.AssetsConfig(package="StipplePivotTable.jl")
 
@@ -11,10 +13,87 @@ import Stipple.Genie.Renderer.Html: register_normal_element, normal_element
 
 register_normal_element("st__pivottable", context=@__MODULE__)
 
-const AGGREGATIONS = [:sum]
-const FILTER_TYPES = [:condition, :values]
-const CONDITIONS = [:greaterThan, :lessThan, :greaterThanOrEqualTo, :lessThanOrEqualTo, :equalTo, :notEqualTo, :contains, :notContains, :startsWith, :endsWith]
 
+@kwdef struct _ValueAggregations
+    average::String = "average"
+    count::String = "count"
+    counta::String = "counta"
+    countunique::String = "countunique"
+    custom::String = "custom"
+    max::String = "max"
+    median::String = "median"
+    min::String = "min"
+    stdev::String = "stdev"
+    stdevp::String = "stdevp"
+    sum::String = "sum"
+    var::String = "var"
+    varp::String = "varp"
+end
+
+@kwdef struct _FilterTypes
+    condition::String = "condition"
+    values::String = "values"
+end
+
+@kwdef struct _FilterConditions
+    contains::String = "contains"
+    ends_with::String = "endsWith"
+    eq::String = "equalTo"
+    gt::String = "greaterThan"
+    gteq::String = "greaterThanOrEqualTo"
+    lt::String = "lessThan"
+    lteq::String = "lessThanOrEqualTo"
+    not_contains::String = "notContains"
+    not_eq::String = "notEqualTo"
+    starts_with::String = "startsWith"
+end
+
+const ValueAggregations = _ValueAggregations()
+const FilterTypes = _FilterTypes()
+const FilterConditions = _FilterConditions()
+
+function snake_to_camel(s)
+    s = string(s)
+    return join([uppercase(s[1]) * s[2:end] for s in split(s, "_")])
+end
+
+abstract type ValueFormatter end
+
+@kwdef mutable struct NumberFormatter <: ValueFormatter
+    decimals::Int = 2
+    thousands::String = ","
+    decimal::String = "."
+end
+
+@kwdef mutable struct CurrencyFormatter <: ValueFormatter
+    symbol::String = "\$"
+    decimals::Int = 2
+    thousands::String = ","
+    decimal::String = "."
+    position::String = "before"
+end
+
+@kwdef mutable struct PercentageFormatter <: ValueFormatter
+    decimals::Int = 2
+    multiply_by_100::Bool = true
+end
+
+#=
+@kwdef mutable struct DateFormatter <: ValueFormatter
+    format::String = "YYYY-MM-DD"
+end
+=#
+
+Base.Dict(formatter::T) where T <: ValueFormatter = Dict(
+    Dict(field => getfield(formatter, field) for field in fieldnames(typeof(formatter)))
+)
+
+function Stipple.render(formatter::T) where T <: ValueFormatter
+    type = replace(string(typeof(formatter)), "Formatter" => "") |> lowercase
+    Dict(:type => type, :config => Dict(
+        [Symbol(snake_to_camel(k)) => v for (k, v) in Dict(formatter)]
+    ))
+end
 
 """
     Cell
@@ -83,12 +162,14 @@ A mutable struct representing a value in a pivot table.
 - `aggregation::Union{String, Symbol}`: The aggregation method to be applied to the field.
 - `formula::Union{String, Symbol, Nothing}`: An optional formula for calculating the value. Defaults to `nothing`.
 - `label::Union{String, Symbol}`: A label for the value. Defaults to the value of `field`.
+- `format::Union{<:ValueFormatter, Nothing}`: An optional formatter for the value. Defaults to `nothing`.
 """
 @kwdef mutable struct Value
     field::Union{String, Symbol}
     aggregation::Union{String, Symbol}
     formula::Union{String, Symbol, Nothing} = nothing
     label::Union{String, Symbol} = field
+    format::Union{<:ValueFormatter, Nothing} = nothing
 end
 
 
@@ -118,10 +199,13 @@ Render a `Value` object into a `Dict` representation.
 # Returns
 - `Dict`: A dictionary containing the `field`, `aggregation`, and `label` from the `Value` object. If `formula` is not `nothing`, it is also included in the dictionary with the formula string.
 """
-function Stipple.render(value::Value)
-    d = Dict(:field => value.field, :aggregation => value.aggregation, :label => value.label)
+function Stipple.render(value::Value) :: Dict{Symbol,Any}
+    d = Dict{Symbol,Any}(:field => value.field, :aggregation => value.aggregation, :label => value.label)
     if value.formula !== nothing
         d[:formula] = " $(value.formula) " # this is needed to allow {field} in the formula to be rendered correctly
+    end
+    if value.format !== nothing
+        d[:formatting] = Stipple.render(value.format)
     end
 
     return d

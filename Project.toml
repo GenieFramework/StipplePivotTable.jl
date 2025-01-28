@@ -1,6 +1,6 @@
 name = "StipplePivotTable"
 uuid = "adab0226-ee3c-44de-8f2f-393b1bf1e936"
-version = "0.3.2"
+version = "0.4"
 
 [deps]
 Stipple = "4acbeb90-81a0-11ea-1966-bdaff8155998"
