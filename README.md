@@ -68,8 +68,8 @@ Example:
 
 ```julia
 values = [
-    Value(field = "Annual Salary", aggregation = "sum"),
-    Value(field = "Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.21", label = "Tax")
+    Value(field = "Annual Salary", aggregation = "sum", format = CurrencyFormatter( decimals=2, symbol="€", position="after" )),
+    Value(field = "Annual Salary", aggregation = "custom", formula = "{Annual Salary} * 0.21", label = "Tax", format = PercentageFormatter( decimals=2, multiply_by_100=true)
 ]
 ```
 
@@ -92,6 +92,18 @@ values = [
 
 - Use curly braces to reference fields: `{fieldName}`
 - Example: `{Annual Salary} * 0.21`
+
+#### Formatting Configuration
+
+- NumberFormatter
+    - `decimals`: Number of decimals, default is `2`
+- CurrencyFormatter
+    - `decimals`: Number of decimals, default is `2`
+    - `symbol`: Currency symbol to display (`$`, `€`...), default is `$`
+    - `position`: Position of the symbol in the cell (`before` or `after`), default is `before`
+- PercentageFormatter
+    - `decimals`: Number of decimals, default is `2`
+    - `multiply_by_100`: Automatically multiply by 100, default is `true`
 
 
 ### filters
