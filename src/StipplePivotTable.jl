@@ -2,6 +2,7 @@ module StipplePivotTable
 
 using Stipple, StippleUI.API, Stipple.ReactiveTools
 import Tables as TablesInterface
+import Base.@kwdef
 
 export pivottable, Cell, Value, Filter, PivotTableOptions, PivotTable
 export ValueAggregations, FilterTypes, FilterConditions
