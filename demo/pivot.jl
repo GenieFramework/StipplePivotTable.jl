@@ -2,11 +2,11 @@ module App
 using GenieFramework
 @genietools
 using StipplePivotTable; const spt = StipplePivotTable
-using DataFrames, JSON3
+using DataFrames, JSON
 
 # Load and parse source data
 json_file = "data/Employee_Sample_Data.json"
-df = JSON3.read(read(json_file, String)) |> DataFrame
+df = JSON.parsefile(json_file) |> DataFrame
 
 # create a pivot table
 pt = PivotTable(
